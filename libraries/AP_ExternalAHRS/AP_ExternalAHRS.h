@@ -75,6 +75,9 @@ public:
 #if AP_EXTERNAL_AHRS_SENSAITION_ENABLED
         SensAItion = 11,
 #endif
+#if AP_EXTERNAL_AHRS_ANELLO_ENABLED
+        ANELLO = 12,
+#endif
     };
 
     static AP_ExternalAHRS *get_singleton(void) {

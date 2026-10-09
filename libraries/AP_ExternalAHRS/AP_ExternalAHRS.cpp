@@ -22,6 +22,7 @@
 
 #include "AP_ExternalAHRS.h"
 #include "AP_ExternalAHRS_backend.h"
+#include "AP_ExternalAHRS_ANELLO.h"
 #include "AP_ExternalAHRS_Aeron_plx.h"
 #include "AP_ExternalAHRS_VectorNav.h"
 #include "AP_ExternalAHRS_MicroStrain5.h"
@@ -62,7 +63,7 @@ const AP_Param::GroupInfo AP_ExternalAHRS::var_info[] = {
     // @Param: _TYPE
     // @DisplayName: AHRS type
     // @Description: Type of AHRS device
-    // @Values: 0:None,1:VectorNav,2:MicroStrain5,5:InertialLabs,6:Trimble GSOF,7:MicroStrain7,8:SBG,10:Aeron,11:SensAItion
+    // @Values: 0:None,1:VectorNav,2:MicroStrain5,5:InertialLabs,6:Trimble GSOF,7:MicroStrain7,8:SBG,10:Aeron,11:SensAItion,12:ANELLO
     // @User: Standard
     AP_GROUPINFO_FLAGS("_TYPE", 1, AP_ExternalAHRS, devtype, HAL_EXTERNAL_AHRS_DEFAULT, AP_PARAM_FLAG_ENABLE),
 
@@ -109,6 +110,12 @@ void AP_ExternalAHRS::init(void)
     case DevType::None:
         // nothing to do
         return;
+
+#if AP_EXTERNAL_AHRS_ANELLO_ENABLED
+    case DevType::ANELLO:
+        backend = NEW_NOTHROW AP_ExternalAHRS_ANELLO(this, state);
+        return;
+#endif
 
 #if AP_EXTERNAL_AHRS_VECTORNAV_ENABLED
     case DevType::VecNav:
